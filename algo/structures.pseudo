@@ -1,0 +1,20 @@
+# structures for a 2 dimensionnal EkNNclus algorithm
+
+EkNN2DSystem: record # datas of the system
+begin
+	points: array of EkNNPoint (1..N) # points of the system
+	distances: matrix of real (1..N, 1..N) # euclidian distances for each couple of points
+	gamma: real # gamma parameter of the EkNNclus algorithm
+	alpha: matrix of reals (1..N, 1..K) # alpha_ik matrix
+	v: matrix of reals (1..N, 1..K) # v_ik matrix
+	kNN: matrix of integers (1..n, 1..K) # K nearest neighbours for each point
+	N: integer # number of points
+	K: integer # K parameter
+	C: integer # actual number of clusters
+end
+
+EkNN2DPoint: record # point of the system
+begin
+	x, y: real # coordinates of the point
+	cluster: integer # number of cluster
+end
