@@ -1,0 +1,43 @@
+# initialisation procedures
+
+EkNNInit(points: array of (x,y) reals,K: integer): EkNNSystem* # General initialisation of the EkNNSystem
+begin
+	result* is a new EkNNSystem
+	result->N <- length(points)
+	result->K <- K
+	result->C <- result->N
+	result->points* is a new array of EkNNPoints (1..result->N)
+	
+	for i in 1:result->N do
+	begin
+		result->points[i]->x <- points[i, 1]
+		result->points[i]->y <- points[i, 2]
+	end
+	
+	EknnInitClusters(result)
+	EkNNInitDistances(result)
+	EkNNInitKNN(result)
+	EkNNInitGamma(result)
+	EkNNInitAlpha(result)
+	EkNNInitV(result)
+
+	return result
+end
+
+EkNNInitClusters(result*: EkNNSystem)
+begin
+	clus is an array of integers (1..result->N)
+	for i in 1:result->N do
+	begin
+		clus[i] <- i
+	end
+
+	toss clus result->N times
+
+	for i in 1:result->N do
+	begin
+		result->points[i]->cluster = clus[i]
+	end
+end
+
+
