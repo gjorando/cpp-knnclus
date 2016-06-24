@@ -24,6 +24,16 @@ begin
 	return result
 end
 
+EkNNDestroy(s*: EkNNSystem) # Deallocates an EkNNSystem
+begin
+	delete s->points
+	delete s->distances
+	delete s->alpha
+	delete s->v
+	delete s->kNN
+	delete s
+end
+
 EkNNInitClusters(result*: EkNNSystem) # Randomly inits clusters
 begin
 	clus is an array of integers (1..result->N)
@@ -32,7 +42,7 @@ begin
 		clus[i] <- i
 	end
 
-	toss clus result->N times
+	toss(clus, result->N)
 
 	for i in 1:result->N do
 	begin
@@ -40,4 +50,18 @@ begin
 	end
 end
 
+EkNNInitDistances(result*: EkNNSystem) # Computes euclidian distances between each point
+begin
+	dist is a matrix of reals (1..result->N,1..result->N)
 
+	for i in 1..result->N do
+		for j in 1..i do
+		begin
+			dist[i,j] <- distance(result->points[i], result->points[j])
+			dist[j, i] <- dist[i, j]
+		end
+
+	diagonal of dist <- 0
+
+	result->distances <- dist
+end
