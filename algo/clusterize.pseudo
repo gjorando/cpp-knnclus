@@ -1,0 +1,40 @@
+EkNNClusterize(system*: EkNNSystem)
+begin
+	flag <- TRUE
+
+	while flag do
+	begin
+		flag <- FALSE
+		u is a matrix of reals (1..N, 1..C) full of 0
+		sigma = toss(an array of integers from 1 to N)
+
+		for i in sigma do # be careful with that
+		begin
+			max <- 0
+			kstar <- 0
+			
+			for k in 1:system->C do
+			begin
+				for j in 1:system->K do
+					if system->points[system->kNN[i,j]]->cluster == k then
+						u[i,k]+=v[i,j]
+				
+				if u[i,k] >= max then
+				begin
+					max <- u[i,k]
+					kstar <- k
+				end					
+			end
+			
+			if system->points[i]->cluster != kstar then
+			begin
+				system->points[i]->cluster <- kstar
+				flag <- true
+			end
+		end
+		system->C <- number of distinct clusters in system->points
+	end
+	
+	system->C == 1 then
+		error("Only one cluster")
+end
