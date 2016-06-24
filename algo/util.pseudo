@@ -1,0 +1,12 @@
+# tools
+
+toss(tab*: array, iter: integer) # tosses an array iter times
+begin
+	for i in 1:iter do
+	begin
+		draw a,b two random numbers between 1 and length(tab)
+		tmp <- tab[a]
+		tab[a] <- tab[b]
+		tab[b] <- tmp
+	end
+end

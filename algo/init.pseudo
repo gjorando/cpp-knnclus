@@ -24,7 +24,7 @@ begin
 	return result
 end
 
-EkNNInitClusters(result*: EkNNSystem)
+EkNNInitClusters(result*: EkNNSystem) # Randomly inits clusters
 begin
 	clus is an array of integers (1..result->N)
 	for i in 1:result->N do
