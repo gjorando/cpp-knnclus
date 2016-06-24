@@ -16,4 +16,12 @@ begin
 	return sqrt((p2.x-p1.x)^2+(p2.y-p1.y)^2)
 end
 
-# TODO SORT AND MEDIAN
+median(t: array of reals): real # determines the median value of an array of reals
+begin
+	# see http://ndevilla.free.fr/median/median/
+end
+
+sort(v*: array of reals): array of reals # sort v and returns sorted indexes
+begin
+	# see http://www.zentut.com/c-tutorial/c-quicksort-algorithm/
+end
