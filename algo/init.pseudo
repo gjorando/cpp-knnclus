@@ -65,3 +65,41 @@ begin
 
 	result->distances <- dist
 end
+
+EkNNInitKNN(result*: EkNNSystem) # Computes the K nearest neighbours
+begin
+	kNN is a matrix of integers (1..N, 1..K)
+	for i in 1..result->N do
+	begin
+		tmpD is an array of reals (1..N)
+		tmpD <- a copy of result->distances[i,]
+		tmp <- sort(tmpD) # tmp will contains sorted indexes, and tmpD sorted values
+		k is an integer
+		k <- 1
+
+		for j in 1:result->K do
+			if tmpD[j] != 0 then
+			begin
+				kNN[i, k] <- tmp[j]
+				k++
+			end
+	end
+
+	result->kNN <- kNN
+end
+
+EkNNInitGamma(result*: EkNNSystem) # Computes the gamma parameter
+begin
+	dist is an array of result->K*result->N reals
+	cpt is an integer
+	cpt <- 1
+
+	for i in 1:result->N do
+		for j in 1:result->K do
+		begin
+			dist[cpt] <- result->distances[i, result->kNN[i,j]]
+			cpt++
+		end
+
+	result->gamma <- 1/median(dist)
+end
