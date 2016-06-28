@@ -1,5 +1,4 @@
 #include "eknnwindev.h"
-#include "quicksort.c"
 
 void toss(unsigned long *a, unsigned long aSize, unsigned long iter)
 {
@@ -74,5 +73,4 @@ void EkNNUpdateC(EkNNSystem *s)
 
 	free(clus);
 	free(distClus);
-	//TODO : must update the size of C, and change the labels of the clusters to fit from 1 to C
 }

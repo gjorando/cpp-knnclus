@@ -14,13 +14,19 @@ EkNNSystem *EkNNInit(double **points, unsigned long N, unsigned long K)
 		result->points[i].x = points[i][0];
 		result->points[i].y = points[i][1];
 	}
-
+	printf("lol");
 	EkNNInitClusters(result);
+	printf("lol");
 	EkNNInitDistances(result);
+	printf("lol");
 	EkNNInitKNN(result);
+	printf("lol");
 	EkNNInitGamma(result);
+	printf("lol");
 	EkNNInitAlpha(result);
+	printf("lol");
 	EkNNInitV(result);
+	printf("lol");
 
 	return result;
 }

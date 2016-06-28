@@ -3,10 +3,10 @@
 #include <time.h>
 #include <eknnwindev.h>
 
-#define N 100
-#define K 50
+#define N 10
+#define K 5
 
-#define RAND
+#define RAND //RAND or STATIC
 
 #ifdef STATIC
 #define N 6

@@ -1,5 +1,5 @@
 //Source: http://www.zentut.com/c-tutorial/c-quicksort-algorithm/
-#include <stdio.h>
+#include "eknnwindev.h"
 
 void swapLU(unsigned long *x, unsigned long *y)
 {
@@ -9,7 +9,7 @@ void swapLU(unsigned long *x, unsigned long *y)
     *y = temp;
 }
  
-void swapD(double *x, double *y)
+void swapD(double *x, double*y)
 {
     double temp;
     temp = *x;
