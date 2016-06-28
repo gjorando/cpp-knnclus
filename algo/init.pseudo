@@ -113,7 +113,7 @@ begin
 	
 	for i in 1:result->N do
 		for j in 1:result->K do
-			a[i,j] <- exp(-result->gamma * result->distances[i, result->kNN[i,j]^2)
+			a[i,j] <- exp(-result->gamma * result->distances[i, result->kNN[i,j]]^2)
 
 	result->alpha <- a
 end
@@ -124,7 +124,7 @@ begin
 
 	for i in 1:result->N do
 		for j in 1:result->K do
-			v[i,j] <- -log(1-result->alpha[i,j])
+			v[i,j] <- -ln(1-result->alpha[i,j])
 
 	result->v <- v
 end

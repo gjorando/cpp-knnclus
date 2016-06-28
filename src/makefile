@@ -1,11 +1,12 @@
-all: buildtest
+all: build buildtest
 cleanall: clean cleantest
-build:
+build: obj/init.o obj/util.o
 	@echo "* Building library..."
 	ar -r build/lib/libeknnwindev.a obj/*.o
 buildtest: build
 	@echo "* Building test..."
-	gcc -Wall -o build/test test/*.c -L"./build/lib/" -leknnwindev -I"./lib/"
+	gcc -Wall -o build/test test/*.c -L"./build/lib/" -leknnwindev -lm -I"./lib/"
+	ln -fs build/test launch
 clean:
 	@echo "* Cleaning library..."
 	rm -f obj/*.o
@@ -13,3 +14,10 @@ clean:
 cleantest:
 	@echo "* Cleaning test..."
 	rm -f build/test
+	rm -f launch
+obj/init.o: lib/init.c lib/eknnwindev.h
+	gcc -Wall -c lib/init.c -o obj/init.o
+obj/util.o: lib/util.c obj/quicksort.o lib/eknnwindev.h
+	gcc -Wall -c lib/util.c -o obj/util.o
+obj/quicksort.o:
+	gcc -Wall -c lib/quicksort.c -o obj/quicksort.o
