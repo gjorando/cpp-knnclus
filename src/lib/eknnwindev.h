@@ -11,6 +11,9 @@
 
 // MACRO DEFINITIONS
 
+#define bool int
+#define TRUE 1
+#define FALSE 0
 
 // STRUCTURE DEFINITIONS
 
@@ -59,11 +62,16 @@ void EkNNInitGamma(EkNNSystem *result);
 void EkNNInitAlpha(EkNNSystem *result);
 void EkNNInitV(EkNNSystem *result);
 
+//general.c
+void EkNNDisplay(EkNNSystem *foo);
+void EkNNClusterize(EkNNSystem *system);
+
 //util.c
 
 void toss(unsigned long *a, unsigned long aSize, unsigned long iter);
 double distance(EkNNPoint p1, EkNNPoint p2);
 unsigned long *specialSort(double *s, unsigned long size);
 double median(double *t, unsigned long size);
+void EkNNUpdateC(EkNNSystem *s);
 
 #endif // _EKNNWINDEV_EKNNWINDEV_H_

@@ -3,10 +3,11 @@
 #include <time.h>
 #include <eknnwindev.h>
 
-#define N 10
-#define K 3
+#define N 100
+#define K 50
 
-#define STATIC
+#define RAND
+
 #ifdef STATIC
 #define N 6
 #endif
@@ -48,44 +49,14 @@ int main(int argc, char **argv)
 		free(points[i]);
 	free(points);
 
-	printf("points=\n");
-	for(unsigned long i = 0 ; i < N ; i++)
-		printf("(%f,%f): #%lu\n", foo->points[i].x, foo->points[i].y, foo->points[i].cluster);
+	EkNNDisplay(foo);
 
-	printf("\ndistances=\n");
-	for(unsigned long i = 0 ; i < N ; i++)
-	{
-		for(unsigned long j = 0 ; j < N ; j++)
-			printf("%f ", foo->distances[i][j]);
-		printf("\n");
-	}
 
-	printf("\nkNN=\n");
-	for(unsigned long i = 0 ; i < N ; i++)
-	{
-		for(unsigned long j = 0 ; j < K ; j++)
-			printf("%lu ", foo->kNN[i][j]);
-		printf("\n");
-	}
+	printf("\n\nCLUSTERIZE\n\n");
+	EkNNClusterize(foo);
+	printf("\n\nDONE\n\n");
 
-	printf("\ngamma=\n%f\n", foo->gamma);
-	
-	printf("\nalpha=\n");
-	for(unsigned long i = 0 ; i < N ; i++)
-	{
-		for(unsigned long j = 0 ; j < K ; j++)
-			printf("%f ", foo->alpha[i][j]);
-		printf("\n");
-	}
-
-	printf("\nv=\n");
-	for(unsigned long i = 0 ; i < N ; i++)
-	{
-		for(unsigned long j = 0 ; j < K ; j++)
-			printf("%f ", foo->v[i][j]);
-		printf("\n");
-	}
-
+	EkNNDisplay(foo);
 
 	EkNNDestroy(foo);
 	
