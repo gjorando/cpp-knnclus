@@ -76,13 +76,16 @@ begin
 		tmp <- sort(tmpD) # tmp will contains sorted indexes, and tmpD sorted values
 		k is an integer
 		k <- 1
-
-		for j in 1:result->K do
-			if tmpD[j] != 0 then
+		j <- 1
+		while j <= result->K do
+		begin
+			if tmpD[k] != 0 then
 			begin
-				kNN[i, k] <- tmp[j]
-				k++
+				kNN[i, j] <- tmp[k]
+				j++
 			end
+			k++
+		end
 	end
 
 	result->kNN <- kNN

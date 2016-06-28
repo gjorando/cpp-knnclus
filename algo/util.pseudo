@@ -21,7 +21,7 @@ begin
 	# see http://ndevilla.free.fr/median/median/
 end
 
-sort(v*: array of reals): array of reals # sort v and returns sorted indexes
+sort(v*: array of reals): array of integers # sort v and returns sorted indexes
 begin
 	# see http://www.zentut.com/c-tutorial/c-quicksort-algorithm/
 end
