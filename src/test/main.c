@@ -3,13 +3,14 @@
 #include <time.h>
 #include <eknnwindev.h>
 
-#define N 5000
-#define K 2500
+#define N 100
+#define K 50
 
-#define RAND //RAND or STATIC
+#define STATIC //RAND or STATIC
 
 #ifdef STATIC
 #define N 6
+#define K 3
 #endif
 
 int main(int argc, char **argv)
@@ -49,9 +50,9 @@ int main(int argc, char **argv)
 		free(points[i]);
 	free(points);
 
-	printf("\n\nCLUSTERIZE\n\n");
+	printf("CLUSTERIZE\n");
 	EkNNClusterize(foo);
-	printf("\n\nDONE\n\n");
+	printf("\nDONE\n");
 
 	//EkNNDisplay(foo);
 	EkNNExportToCSV(foo, "./foo.csv");
