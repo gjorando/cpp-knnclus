@@ -55,7 +55,7 @@ int main(int argc, char **argv)
 	printf("\nDONE\n");
 
 	//EkNNDisplay(foo);
-	EkNNExportToCSV(foo, "./foo.csv");
+	EkNNExportToCSV(foo, "./build/foo.csv");
 
 	EkNNDestroy(foo);
 	
