@@ -3,8 +3,8 @@
 #include <time.h>
 #include <eknnwindev.h>
 
-#define N 10
-#define K 5
+#define N 1000
+#define K 500
 
 #define RAND //RAND or STATIC
 
@@ -49,14 +49,12 @@ int main(int argc, char **argv)
 		free(points[i]);
 	free(points);
 
-	EkNNDisplay(foo);
-
-
 	printf("\n\nCLUSTERIZE\n\n");
 	EkNNClusterize(foo);
 	printf("\n\nDONE\n\n");
 
 	EkNNDisplay(foo);
+	EkNNExportToCSV(foo, "./foo.csv");
 
 	EkNNDestroy(foo);
 	

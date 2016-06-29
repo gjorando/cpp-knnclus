@@ -125,6 +125,16 @@ void EkNNDisplay(EkNNSystem *foo);
  */
 void EkNNClusterize(EkNNSystem *system);
 
+//csv.c
+
+/*! \brief Exports the points to CSV.
+ *  \param system the EkNNSystem.
+ *  \param path the path of export.
+ *
+ *  Exports the coordinates of the points and the clusters in a csv file. The first line is dedicated to the eastings, whereas each next line corresponds to the northings of a cluster (the first cell of each line stores the label of the cluster).
+ */
+void EkNNExportToCSV(EkNNSystem *system, char *path);
+
 //util.c
 
 /*! \brief Tosses an array a iter times.
