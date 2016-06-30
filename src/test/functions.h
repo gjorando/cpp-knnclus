@@ -21,5 +21,6 @@ void initRandomSystem(EkNNSystem **f);
 void deleteSystem(EkNNSystem *f);
 void clusterize(EkNNSystem *f);
 void exportToCSV(EkNNSystem *f);
+void importFromDataset(EkNNSystem **f);
 
 #endif //_TESTEKNN_FUNCTIONS_H_

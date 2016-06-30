@@ -1,6 +1,6 @@
 #include "functions.h"
 
-#define MAXMODE1 4
+#define MAXMODE1 5
 #define MAXMODE2 6
 
 int main(int argc, char **argv)
@@ -32,6 +32,10 @@ int main(int argc, char **argv)
 							mode = 2;
 							menuMax = MAXMODE2;
 							break;
+						case 3:
+							importFromDataset(&foo);
+							mode = 2;
+							menuMax = MAXMODE2;
 						default:
 							break;
 					}
