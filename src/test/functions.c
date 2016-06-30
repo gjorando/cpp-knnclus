@@ -210,8 +210,8 @@ void importFromDataset(EkNNSystem **f)
 					double noiseD = (double) atoi(noise);
 					double CO2D = (double) atoi(CO2);
 				
-					points[i][0] = noiseD;
-					points[i][1] = CO2D;
+					points[i][1] = noiseD;
+					points[i][0] = CO2D;
 					
 					i++;
 
@@ -229,6 +229,12 @@ void importFromDataset(EkNNSystem **f)
 	while(i < n && c != EOF);
 	nDef = i;
 	printf("\n%lu were read.\n", nDef);
+
+
+	for(unsigned long i = 1 ; i < nDef ; i++)
+		points[i][0]-= points[i-1][0];
+	points[0][0] = 0;
+
 	printf("\nPerforming initialisation...\n");
 	*f = EkNNInit(points, nDef, k);
 
