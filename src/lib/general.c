@@ -48,8 +48,12 @@ void EkNNClusterize(EkNNSystem *system)
 	for(unsigned long i = 0 ; i < system->N ; i++)
 		sigma[i] = i;
 
+	unsigned long iter = 1;
+
 	while(flag == TRUE)
 	{
+		printf("Iteration #%lu\n", iter);
+
 		flag = FALSE;
 
 		double **u = (double**) malloc(system->N*sizeof(double*));
@@ -64,6 +68,9 @@ void EkNNClusterize(EkNNSystem *system)
 
 		for(unsigned long i = 0 ; i < system->N ; i++)
 		{
+			printf("%lu... ", sigma[i]);
+			fflush(stdout);
+
 			double max = 0;
 			unsigned long kstar = 1;
 
@@ -96,8 +103,10 @@ void EkNNClusterize(EkNNSystem *system)
 			fprintf(stderr, "EkNNClusterize: Gave only one cluster, please try again\n");
 			exit(1);
 		}
+
+		printf("\n");
+		iter++;
 	}
 
 	free(sigma);
 }
-

@@ -1,63 +1,69 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <eknnwindev.h>
+#include "functions.h"
 
-#define N 100
-#define K 50
-
-#define STATIC //RAND or STATIC
-
-#ifdef STATIC
-#define N 6
-#define K 3
-#endif
+#define MAXMODE1 4
+#define MAXMODE2 6
 
 int main(int argc, char **argv)
 {
 	srand(time(NULL));
 
-	double **points = NULL;
-	points = (double**) malloc(N*sizeof(double*));
+	EkNNSystem *foo = NULL;
+	int menu = 1, menuMax = MAXMODE1, mode = 1;
 
-	for(unsigned long i = 0 ; i < N ; i++)
+	while(menu != menuMax)
 	{
-		points[i] = (double*) malloc(2*sizeof(double));
-#ifdef RAND
-		points[i][0] = ((float)rand()/(float)(RAND_MAX/20))-10;
-		points[i][1] = ((float)rand()/(float)(RAND_MAX/20))-10;
-#endif
+		displayMenu(&menu, menuMax, mode);
+
+		if(menu == menuMax-1)
+			printAbout();
+		else if(menu != menuMax)
+			switch(mode)
+			{
+				case 1:
+					switch(menu)
+					{
+						case 1:
+							initRandomSystem(&foo);
+							mode = 2;
+							menuMax = MAXMODE2;
+							break;
+						case 2:
+							printf("NEW\n");
+							mode = 2;
+							menuMax = MAXMODE2;
+							break;
+						default:
+							break;
+					}
+					break;
+				case 2:
+					switch(menu)
+					{
+						case 1:
+							clusterize(foo);
+							break;
+						case 2:
+							printState(foo);
+							break;
+						case 3:
+							deleteSystem(foo);
+							foo = NULL;
+							mode = 1;
+							menuMax = MAXMODE1;
+							break;
+						case 4:
+							exportToCSV(foo);
+							break;
+						default:
+							break;
+					}
+					break;
+				default:
+					break;
+			}
 	}
+	if(foo != NULL) EkNNDestroy(foo);
+	CLEAR_SCREEN();
 
-#ifdef STATIC
-	points[0][0] = 0;
-	points[0][1] = 9;
-	points[1][0] = 4;
-	points[1][1] = 1;
-	points[2][0] = 7;
-	points[2][1] = -7;
-	points[3][0] = -4;
-	points[3][1] = -4;
-	points[4][0] = -1;
-	points[4][1] = 0;
-	points[5][0] = 6;
-	points[5][1] = 5;
-#endif
-
-	EkNNSystem *foo = EkNNInit(points, N, K);
-	
-	for(unsigned long i = 0 ; i < N ; i++)
-		free(points[i]);
-	free(points);
-
-	printf("CLUSTERIZE\n");
-	EkNNClusterize(foo);
-	printf("\nDONE\n");
-
-	//EkNNDisplay(foo);
-	EkNNExportToCSV(foo, "./build/foo.csv");
-
-	EkNNDestroy(foo);
-	
 	return 0;
 }
