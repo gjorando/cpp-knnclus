@@ -9,4 +9,3 @@ THIS IS A TEST IMPLEMENTATION.
 ToDo:
 * Secure malloc (test if the pointer is NULL before and after allocation)
 * Manage csv import
-* Create an interactive demo program
