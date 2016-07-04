@@ -1,7 +1,7 @@
 //Source: http://www.zentut.com/c-tutorial/c-quicksort-algorithm/
-#include "eknnwindev.h"
+#include "eknnclus.h"
 
-void swapLU(unsigned long *x, unsigned long *y)
+void EkNNQuicksort::swapLU(unsigned long *x, unsigned long *y)
 {
     unsigned long temp;
     temp = *x;
@@ -9,7 +9,7 @@ void swapLU(unsigned long *x, unsigned long *y)
     *y = temp;
 }
  
-void swapD(double *x, double*y)
+void EkNNQuicksort::swapD(double *x, double*y)
 {
     double temp;
     temp = *x;
@@ -17,20 +17,20 @@ void swapD(double *x, double*y)
     *y = temp;
 }
 
-long choose_pivot(long i, long j )
+long EkNNQuicksort::choose_pivot(long i, long j )
 {
     return((i+j) /2);
 }
  
-void quicksort(double *list, unsigned long *indexes, long m, long n)
+void EkNNQuicksort::quicksort(double *list, unsigned long *indexes, long m, long n)
 {
     long i,j,k;
 	double key;
     if(m < n)
     {
-        k = choose_pivot(m,n);
-        swapD(&list[m],&list[k]);
-		if(indexes != NULL) swapLU(&indexes[m], &indexes[k]);
+        k = EkNNQuicksort::choose_pivot(m,n);
+        EkNNQuicksort::swapD(&list[m],&list[k]);
+		if(indexes != NULL) EkNNQuicksort::swapLU(&indexes[m], &indexes[k]);
         key = list[m];
         i = m+1;
         j = n;
@@ -42,8 +42,8 @@ void quicksort(double *list, unsigned long *indexes, long m, long n)
                 j--;
             if(i < j)
 			{
-                swapD(&list[i], &list[j]);
-				if(indexes != NULL) swapLU(&indexes[i], &indexes[j]);
+                EkNNQuicksort::swapD(&list[i], &list[j]);
+				if(indexes != NULL) EkNNQuicksort::swapLU(&indexes[i], &indexes[j]);
 			}
         }
         /* swap two elements */
@@ -51,7 +51,7 @@ void quicksort(double *list, unsigned long *indexes, long m, long n)
 		if(indexes != NULL) swapLU(&indexes[m], &indexes[j]);
  
         /* recursively sort the lesser list */
-        quicksort(list, indexes, m, j-1);
-        quicksort(list, indexes, j+1, n);
+        EkNNQuicksort::quicksort(list, indexes, m, j-1);
+        EkNNQuicksort::quicksort(list, indexes, j+1, n);
     }
 }
