@@ -11,13 +11,16 @@
 #include <string>
 #include <cmath>
 
+namespace EkNN
+{
+
 // CLASS DEFINITIONS
 
 /*! \brief Container of a two dimensional point.
  *
  *  Stores the coordinates of a point as well as the label of its cluster.
  */
-class EkNNPoint
+class Point
 {
 private:
 
@@ -27,20 +30,20 @@ private:
 
 public:
 
-	/*! \brief Empty constructor for the EkNNPoint
+	/*! \brief Empty constructor for the Point
 	 */
-	EkNNPoint();
-	/*! \brief Constructor for the EkNNPoint.
+	Point();
+	/*! \brief Constructor for the Point.
 	 *  \param dim Number of dimensions.
 	 */
-	EkNNPoint(unsigned long dim);
+	Point(unsigned long dim);
 	/*! \brief Copy constructor.
 	 *  \param p Point to copy.
 	 */
-	EkNNPoint(EkNNPoint &p);
-	/*! \brief Destructor of EkNNPoint.
+	Point(Point &p);
+	/*! \brief Destructor of Point.
 	 */
-	~EkNNPoint();
+	~Point();
 	/*! \brief Gets the coordinate of a given dimension (can be read or written).
 	 *  \param i Dimension. If i > D or i <= 0, result may be indeterminated.
 	 *  \return A reference to the coordinate at dimension i.
@@ -58,28 +61,28 @@ public:
 	 *  \param c new value for cluster.
 	 */
 	void setCluster(unsigned long c);
-	/*! \brief Changes the depth of an EkNNPoint.
+	/*! \brief Changes the depth of an Point.
 	 *  \param d New value for D.
 	 *
 	 *  Be careful, this method erases your coordinates.
 	 */
 	void setDepth(unsigned long d);
-	/*! \brief Computes the euclidian distance between two EkNNPoints.
+	/*! \brief Computes the euclidian distance between two Points.
 	 *  \param p1 The point.
 	 *  \return Euclidian distance between this and p.
 	 */
-	double distance(EkNNPoint &p);
+	double distance(Point &p);
 };
 
 /*! \brief Container of an EkNN two dimensional system.
  *
  *  Stores the datas of an EkNN two dimensional system. Must be initialized with EkNNInit(double **points, long K).
  */
-class EkNNSystem
+class System
 {
 private:
 
-	EkNNPoint *points; //!< The points of the system.
+	Point *points; //!< The points of the system.
 	double **distances; //!< N*N array storing the euclidian distances for each point (useful to compute kNN).
 	double **alpha; //!< N*K alpha_ik matrix (useful to compute v).
 	double **v; //!< N*K v_ik matrix.
@@ -90,56 +93,56 @@ private:
 	unsigned long C; //!< Actual number of clusters.
 	unsigned long D; //!< Depth of the system.
 
-	/*! \brief Computes initial clusters of an EkNNSystem.
+	/*! \brief Computes initial clusters of an System.
 	 *
 	 *  Randomly inits one cluster per point, and one point per cluster.
 	 */
 	void initClusters();
-	/*! \brief Computes euclidian distances between each point of an EkNNSystem.
+	/*! \brief Computes euclidian distances between each point of an System.
 	 *
-	 *  It fulls the distance attribute of an EkNNSystem with proper distances.
+	 *  It fulls the distance attribute of an System with proper distances.
 	 */
 	void initDistances();
-	/*! \brief Computes the kNN algorithm of an EkNNSystem.
+	/*! \brief Computes the kNN algorithm of an System.
 	 *
-	 *  Determines which are the K nearest neighbours for each point, and puts the result in the kNN attribute of the EkNNSystem.
+	 *  Determines which are the K nearest neighbours for each point, and puts the result in the kNN attribute of the System.
 	 */
 	void initKNN();
-	/*! \brief Computes the gamma of an EkNNSystem.
+	/*! \brief Computes the gamma of an System.
 	 *
-	 *  This parameter is essential to compute the alpha matrix, if you want to call EkNNInitAlpha(EkNNSystem*), please call this function first!
+	 *  This parameter is essential to compute the alpha matrix, if you want to call EkNNInitAlpha(System*), please call this function first!
 	 */
 	void initGamma();
-	/*! \brief Computes the alpha_ik matrix of an EkNNSystem.
+	/*! \brief Computes the alpha_ik matrix of an System.
 	 *
-	 *  This matrix is essential to compute the v matrix, if you want to call EkNNInitV(EkNNSystem*), please call this function first!
+	 *  This matrix is essential to compute the v matrix, if you want to call EkNNInitV(System*), please call this function first!
 	 */
 	void initAlpha();
-	/*! \brief Computes a special v_ik of an EkNNSystem.
+	/*! \brief Computes a special v_ik of an System.
 	 *
 	 *  This is a modified version of the original v_ij square matrix used in the original EkNNclus algorithm. Instead of a square matrix of N*N points, we actually only need a v_ik matrix.
 	 */
 	void initV();
-	/*! \brief Updates the actual number of clusters C in an EkNNSystem and refreshes the labels of the clusters in points.
+	/*! \brief Updates the actual number of clusters C in an System and refreshes the labels of the clusters in points.
 	 */
 	void updateC();
 
 public:
 
-	/*! \brief Constructor of EkNNSystem.
+	/*! \brief Constructor of System.
 	 *  \param p array of N*D values (D first values for the first point, D next ones for the second point, and so on).
 	 *  \param n number of points.
 	 *  \param k K parameter for the kNN algorithm.
 	 *
 	 *  When you want to clusterize a set of points, you need essential parameters: this constructor computes them.
 	 */
-	EkNNSystem(double *p, unsigned long d, unsigned long n, unsigned long k);
-	/*! \brief Destructor of EkNNSystem.
+	System(double *p, unsigned long d, unsigned long n, unsigned long k);
+	/*! \brief Destructor of System.
 	 */
-	~EkNNSystem();
+	~System();
 	/*! \brief Executes the EkNNclus procedure.
      *
-	 *  This is the main function: once you've properly initialized an EkNNSystem, use this function to group the points in clusters using the EkNNclus algorithm as described in "Ek-NNclus: a clustering procedure based on the evidential K-nearest neighbor rule" by Thierry Denoeux, Orakanya Kanjanatarakul and Songsak Sriboonchitta. In this function, we don't compute the evidential part of the algorithm.
+	 *  This is the main function: once you've properly initialized an System, use this function to group the points in clusters using the EkNNclus algorithm as described in "Ek-NNclus: a clustering procedure based on the evidential K-nearest neighbor rule" by Thierry Denoeux, Orakanya Kanjanatarakul and Songsak Sriboonchitta. In this function, we don't compute the evidential part of the algorithm.
 	 */
 	void clusterize();
 	/*! \brief Exports the points to CSV.
@@ -157,7 +160,7 @@ public:
  *
  *  This class contains some static utilitary functions.
  */
-class EkNNUtils
+class Utils
 {
 public:
 	
@@ -183,7 +186,7 @@ public:
 
 /*! \brief Methods for quicksort algorithm.
  */
-class EkNNQuicksort
+class Quicksort
 {
 public:
 	
@@ -215,5 +218,7 @@ public:
 	 */
 	static void quicksort(double *list, unsigned long *indexes, long m, long n);
 };
+
+} // NAMESPACE EkNN
 
 #endif // _EKNNCLUS_EKNNCLUS_H_

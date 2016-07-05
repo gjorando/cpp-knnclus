@@ -26,7 +26,7 @@ int main(void)
 	points[10] = 6;
 	points[11] = 5;
 
-	EkNNSystem s(points, D, N, K);
+	EkNN::System s(points, D, N, K);
 
 	s.clusterize();
 	s.display();

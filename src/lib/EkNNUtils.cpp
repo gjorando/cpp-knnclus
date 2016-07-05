@@ -1,6 +1,9 @@
 #include "eknnclus.h"
 
-void EkNNUtils::toss(unsigned long *a, unsigned long aSize, unsigned long iter)
+namespace EkNN
+{
+
+void Utils::toss(unsigned long *a, unsigned long aSize, unsigned long iter)
 {
 	for(unsigned long i = 0 ; i < iter ; i++)
 	{
@@ -11,19 +14,21 @@ void EkNNUtils::toss(unsigned long *a, unsigned long aSize, unsigned long iter)
 	}
 }
 
-unsigned long *EkNNUtils::specialSort(double *s, unsigned long size)
+unsigned long *Utils::specialSort(double *s, unsigned long size)
 {
 	unsigned long *res = new unsigned long[size];
 	for(unsigned long i = 0 ; i < size ; i++)
 		res[i] = i;
 
-	EkNNQuicksort::quicksort(s, res, 0, size-1);
+	Quicksort::quicksort(s, res, 0, size-1);
 
 	return res;
 }
 
-double EkNNUtils::median(double *t, unsigned long size)
+double Utils::median(double *t, unsigned long size)
 {
-	EkNNQuicksort::quicksort(t, NULL, 0, size-1);	
+	Quicksort::quicksort(t, NULL, 0, size-1);	
 	return t[(size-1)/2];
 }
+
+} // NAMESPACE EkNN

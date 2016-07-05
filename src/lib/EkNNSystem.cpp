@@ -1,13 +1,16 @@
 #include "eknnclus.h"
 
-EkNNSystem::EkNNSystem(double *p, unsigned long d, unsigned long n, unsigned long k)
+namespace EkNN
+{
+
+System::System(double *p, unsigned long d, unsigned long n, unsigned long k)
 {	
 	N = n;
 	K = k;
 	C = n;
 	D = d;
 
-	points = new EkNNPoint[N];
+	points = new Point[N];
 	for(unsigned long i = 0 ; i < N ; i++)
 	{
 		points[i].setDepth(D);
@@ -22,14 +25,14 @@ EkNNSystem::EkNNSystem(double *p, unsigned long d, unsigned long n, unsigned lon
 	initV();
 }
 
-void EkNNSystem::initClusters()
+void System::initClusters()
 {
 	unsigned long *clus = new unsigned long[N];
 
 	for(unsigned long i = 0 ; i < N ; i++)
 		clus[i] = i+1;
 
-	EkNNUtils::toss(clus, N, 1.5*N);
+	Utils::toss(clus, N, 1.5*N);
 
 	for(unsigned long i = 0 ; i < N ; i++)
 		points[i].setCluster(clus[i]);
@@ -37,7 +40,7 @@ void EkNNSystem::initClusters()
 	delete[] clus;
 }
 
-void EkNNSystem::initDistances()
+void System::initDistances()
 {
 	double **dist = new double*[N];
 	for(unsigned long i = 0 ; i < N ; i++)
@@ -56,7 +59,7 @@ void EkNNSystem::initDistances()
 	distances = dist;
 }
 
-void EkNNSystem::initKNN()
+void System::initKNN()
 {
 	unsigned long **knn = new unsigned long*[N];
 	for(unsigned long i = 0 ; i < N ; i++)
@@ -69,7 +72,7 @@ void EkNNSystem::initKNN()
 		for(unsigned long j = 0 ; j < N ; j++)
 			tmpD[j] = distances[i][j];
 
-		unsigned long *tmp = EkNNUtils::specialSort(tmpD, N);
+		unsigned long *tmp = Utils::specialSort(tmpD, N);
 		
 		unsigned long j = 0, k = 0; 
 		while(j < K)
@@ -89,7 +92,7 @@ void EkNNSystem::initKNN()
 	kNN = knn;
 }
 
-void EkNNSystem::initGamma()
+void System::initGamma()
 {
 	double *dist;
 	dist = new double[K*N];
@@ -100,13 +103,13 @@ void EkNNSystem::initGamma()
 		for(unsigned long j = 0 ; j < K ; j++)
 			dist[cpt++] = distances[i][kNN[i][j]];
 
-	gamma = 1/EkNNUtils::median(dist, K*N);
+	gamma = 1/Utils::median(dist, K*N);
 
 	delete[] dist;
 
 }
 
-void EkNNSystem::initAlpha()
+void System::initAlpha()
 {
 	double **a = new double*[N];
 	for(unsigned long i = 0 ; i < N ; i++)
@@ -119,7 +122,7 @@ void EkNNSystem::initAlpha()
 	alpha = a;
 }
 
-void EkNNSystem::initV()
+void System::initV()
 {
 	v = new double*[N];
 	for(unsigned long i = 0 ; i < N ; i++)
@@ -130,7 +133,7 @@ void EkNNSystem::initV()
 			v[i][j] = -log(1-alpha[i][j]);
 }
 
-EkNNSystem::~EkNNSystem()
+System::~System()
 {
 	delete[] points;
 	for(unsigned long i = 0 ; i < N ; i++)
@@ -146,7 +149,7 @@ EkNNSystem::~EkNNSystem()
 	delete[] v;
 }
 
-void EkNNSystem::clusterize()
+void System::clusterize()
 {
 	bool flag = true;
 	unsigned long *sigma = new unsigned long[N];
@@ -169,7 +172,7 @@ void EkNNSystem::clusterize()
 				u[i][j] = 0;
 		}
 		
-		EkNNUtils::toss(sigma, N, 2*N);
+		Utils::toss(sigma, N, 2*N);
 
 		for(unsigned long i = 0 ; i < N ; i++)
 		{
@@ -216,13 +219,13 @@ void EkNNSystem::clusterize()
 
 }
 
-void EkNNSystem::updateC()
+void System::updateC()
 {
 	unsigned long *clus = new unsigned long[N];
 	for(unsigned long i = 0 ; i < N ; i++)
 		clus[i] = points[i].getCluster();
 
-	EkNNQuicksort::quicksort((double*)clus, NULL, 0, N-1);
+	Quicksort::quicksort((double*)clus, NULL, 0, N-1);
 
 	//We kept C allocations because we need to use realloc
 	unsigned long *distClus = (unsigned long*) malloc(sizeof(unsigned long));
@@ -260,7 +263,7 @@ void EkNNSystem::updateC()
 
 }
 
-void EkNNSystem::display()
+void System::display()
 {
 	std::cout << "N=" << N << std::endl;
 	std::cout << "K=" << K << std::endl;
@@ -309,3 +312,5 @@ void EkNNSystem::display()
 		std::cout << std::endl;
 	}
 }
+
+} // NAMESPACE EkNN

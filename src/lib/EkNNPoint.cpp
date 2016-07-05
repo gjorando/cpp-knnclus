@@ -1,18 +1,21 @@
 #include "eknnclus.h"
 
-EkNNPoint::EkNNPoint()
+namespace EkNN
+{
+
+Point::Point()
 {
 	coordinates = NULL;
 	D = 0;
 }
 
-EkNNPoint::EkNNPoint(unsigned long dim)
+Point::Point(unsigned long dim)
 {
 	coordinates = new double[dim];
 	D = dim;
 }
 
-EkNNPoint::EkNNPoint(EkNNPoint &p)
+Point::Point(Point &p)
 {
 	coordinates = new double[p.depth()];
 	D = p.depth();
@@ -22,12 +25,12 @@ EkNNPoint::EkNNPoint(EkNNPoint &p)
 		coordinates[i-1] = p[i];
 }
 
-EkNNPoint::~EkNNPoint()
+Point::~Point()
 {
 	delete coordinates;
 }
 
-double &EkNNPoint::operator[](size_t i)
+double &Point::operator[](size_t i)
 {
 	if((i <= D) && (i > 0))
 		return coordinates[i-1];
@@ -35,29 +38,29 @@ double &EkNNPoint::operator[](size_t i)
 		return coordinates[0];
 }
 
-unsigned long EkNNPoint::depth()
+unsigned long Point::depth()
 {
 	return D;
 }
 
-unsigned long EkNNPoint::getCluster()
+unsigned long Point::getCluster()
 {
 	return cluster;
 }
 
-void EkNNPoint::setCluster(unsigned long c)
+void Point::setCluster(unsigned long c)
 {
 	cluster = c;
 }
 
-void EkNNPoint::setDepth(unsigned long d)
+void Point::setDepth(unsigned long d)
 {
 	D = d;
 	if(coordinates != NULL) delete coordinates;
 	coordinates = new double[d];
 }
 
-double EkNNPoint::distance(EkNNPoint &p)
+double Point::distance(Point &p)
 {
 	bool smallestDimIsThis = D<p.depth()?true:false;
 	double smallestDim = smallestDimIsThis?D:p.depth();
@@ -67,3 +70,5 @@ double EkNNPoint::distance(EkNNPoint &p)
 
 	return sqrt(calc);
 }
+
+} // NAMESPACE EkNN

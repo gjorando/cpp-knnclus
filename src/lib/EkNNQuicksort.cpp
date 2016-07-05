@@ -1,7 +1,10 @@
 //Source: http://www.zentut.com/c-tutorial/c-quicksort-algorithm/
 #include "eknnclus.h"
 
-void EkNNQuicksort::swapLU(unsigned long *x, unsigned long *y)
+namespace EkNN
+{
+
+void Quicksort::swapLU(unsigned long *x, unsigned long *y)
 {
     unsigned long temp;
     temp = *x;
@@ -9,7 +12,7 @@ void EkNNQuicksort::swapLU(unsigned long *x, unsigned long *y)
     *y = temp;
 }
  
-void EkNNQuicksort::swapD(double *x, double*y)
+void Quicksort::swapD(double *x, double*y)
 {
     double temp;
     temp = *x;
@@ -17,20 +20,20 @@ void EkNNQuicksort::swapD(double *x, double*y)
     *y = temp;
 }
 
-long EkNNQuicksort::choose_pivot(long i, long j )
+long Quicksort::choose_pivot(long i, long j )
 {
     return((i+j) /2);
 }
  
-void EkNNQuicksort::quicksort(double *list, unsigned long *indexes, long m, long n)
+void Quicksort::quicksort(double *list, unsigned long *indexes, long m, long n)
 {
     long i,j,k;
 	double key;
     if(m < n)
     {
-        k = EkNNQuicksort::choose_pivot(m,n);
-        EkNNQuicksort::swapD(&list[m],&list[k]);
-		if(indexes != NULL) EkNNQuicksort::swapLU(&indexes[m], &indexes[k]);
+        k = Quicksort::choose_pivot(m,n);
+        Quicksort::swapD(&list[m],&list[k]);
+		if(indexes != NULL) Quicksort::swapLU(&indexes[m], &indexes[k]);
         key = list[m];
         i = m+1;
         j = n;
@@ -42,8 +45,8 @@ void EkNNQuicksort::quicksort(double *list, unsigned long *indexes, long m, long
                 j--;
             if(i < j)
 			{
-                EkNNQuicksort::swapD(&list[i], &list[j]);
-				if(indexes != NULL) EkNNQuicksort::swapLU(&indexes[i], &indexes[j]);
+                Quicksort::swapD(&list[i], &list[j]);
+				if(indexes != NULL) Quicksort::swapLU(&indexes[i], &indexes[j]);
 			}
         }
         /* swap two elements */
@@ -51,7 +54,9 @@ void EkNNQuicksort::quicksort(double *list, unsigned long *indexes, long m, long
 		if(indexes != NULL) swapLU(&indexes[m], &indexes[j]);
  
         /* recursively sort the lesser list */
-        EkNNQuicksort::quicksort(list, indexes, m, j-1);
-        EkNNQuicksort::quicksort(list, indexes, j+1, n);
+        Quicksort::quicksort(list, indexes, m, j-1);
+        Quicksort::quicksort(list, indexes, j+1, n);
     }
 }
+
+} // NAMESPACE EkNN
