@@ -1,8 +1,9 @@
-# C - kNNclus Windev module
+# C++ kNNclus module
 
-kNNclus procedure module for Windev. Written in C++.
+### A clustering procedure using the kNN algorithm for general purposes
 
-Further information is given in the documentation (use doxygen to generate it: `doxygen src/doxyconf`).
+This module is an implementation of a clustering procedure based on the K-nearest neighbor rule. It is very similar to the EkNNclus algorithm, as described in "EK-NNclus: a clustering procedure based on the evidential K-nearest neighbor rule" by Thierry Denoeux, Orakanya Kanjanatarakul, and Songsak Sriboonchitta.
 
-ToDo:
-* Secure malloc (test if the pointer is NULL before and after allocation)
+### Installation
+
+...
