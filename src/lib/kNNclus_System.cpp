@@ -1,6 +1,6 @@
 #include "knnclus.h"
 
-namespace kNN
+namespace kNNclus
 {
 
 System::System(double *p, unsigned long d, unsigned long n, unsigned long k)
@@ -313,4 +313,4 @@ void System::display()
 	}
 }
 
-} // NAMESPACE EkNN
+} // NAMESPACE kNNclus

@@ -1,6 +1,6 @@
 all: build buildtest
 cleanall: clean cleantest
-build: obj/kNNPoint.o obj/kNNSystem.o  obj/kNNUtils.o obj/kNNQuicksort.o
+build: obj/kNNclus_Point.o obj/kNNclus_System.o  obj/kNNclus_Utils.o obj/kNNclus_Quicksort.o
 	@echo "* Building library..."
 	ar -r build/lib/libknnclus.a obj/*.o
 buildtest: build
@@ -15,16 +15,20 @@ cleantest:
 	@echo "* Cleaning test..."
 	rm -f build/test
 	rm -f launch
-obj/kNNPoint.o: lib/kNNPoint.cpp lib/knnclus.h
-	g++ -Wall -c lib/kNNPoint.cpp -o obj/kNNPoint.o
-obj/kNNSystem.o: lib/kNNSystem.cpp lib/knnclus.h
-	g++ -Wall -c lib/kNNSystem.cpp -o obj/kNNSystem.o
-obj/kNNUtils.o: lib/kNNUtils.cpp lib/knnclus.h
-	g++ -Wall -c lib/kNNUtils.cpp -o obj/kNNUtils.o
-obj/kNNQuicksort.o: lib/kNNQuicksort.cpp lib/knnclus.h
-	g++ -Wall -c lib/kNNQuicksort.cpp -o obj/kNNQuicksort.o
+obj/kNNclus_Point.o: lib/kNNclus_Point.cpp lib/knnclus.h
+	g++ -Wall -c lib/kNNclus_Point.cpp -o obj/kNNclus_Point.o
+obj/kNNclus_System.o: lib/kNNclus_System.cpp lib/knnclus.h
+	g++ -Wall -c lib/kNNclus_System.cpp -o obj/kNNclus_System.o
+obj/kNNclus_Utils.o: lib/kNNclus_Utils.cpp lib/knnclus.h
+	g++ -Wall -c lib/kNNclus_Utils.cpp -o obj/kNNclus_Utils.o
+obj/kNNclus_Quicksort.o: lib/kNNclus_Quicksort.cpp lib/knnclus.h
+	g++ -Wall -c lib/kNNclus_Quicksort.cpp -o obj/kNNclus_Quicksort.o
 install: build
 	@echo "* Installing knnclus..."
 	cp build/lib/libknnclus.a /usr/local/lib/
 	chmod 777 /usr/local/lib/libknnclus.a
 	cp lib/*.h /usr/local/include
+uninstall:
+	@echo "* Cleaning knnclus install..."
+	rm -f /usr/local/lib/libknnclus.a
+	rm -f /usr/local/include/knnclus.h

@@ -1,6 +1,6 @@
 #include "knnclus.h"
 
-namespace kNN
+namespace kNNclus
 {
 
 Point::Point()
@@ -71,4 +71,4 @@ double Point::distance(Point &p)
 	return sqrt(calc);
 }
 
-} // NAMESPACE EkNN
+} // NAMESPACE kNNclus

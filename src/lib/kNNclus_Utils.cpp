@@ -1,6 +1,6 @@
 #include "knnclus.h"
 
-namespace kNN
+namespace kNNclus
 {
 
 void Utils::toss(unsigned long *a, unsigned long aSize, unsigned long iter)
@@ -31,4 +31,4 @@ double Utils::median(double *t, unsigned long size)
 	return t[(size-1)/2];
 }
 
-} // NAMESPACE EkNN
+} // NAMESPACE kNNclus

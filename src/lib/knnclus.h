@@ -1,4 +1,4 @@
-/*! \file knnwindev.h
+/*! \file knnclus.h
  *  \brief Definitions for the kNNclus module.
  *  \author LTI IUT Amiens
  */
@@ -11,7 +11,7 @@
 #include <string>
 #include <cmath>
 
-namespace kNN
+namespace kNNclus
 {
 
 // CLASS DEFINITIONS
@@ -68,7 +68,7 @@ public:
 	 */
 	void setDepth(unsigned long d);
 	/*! \brief Computes the euclidian distance between two Points.
-	 *  \param p1 The point.
+	 *  \param p The point.
 	 *  \return Euclidian distance between this and p.
 	 */
 	double distance(Point &p);
@@ -130,9 +130,10 @@ private:
 public:
 
 	/*! \brief Constructor of System.
-	 *  \param p array of N*D values (D first values for the first point, D next ones for the second point, and so on).
-	 *  \param n number of points.
+	 *  \param p Array of N*D values (D first values for the first point, D next ones for the second point, and so on).
+	 *  \param n Number of points.
 	 *  \param k K parameter for the kNN algorithm.
+	 *  \param d Number of dimensions.
 	 *
 	 *  When you want to clusterize a set of points, you need essential parameters: this constructor computes them.
 	 */
@@ -219,6 +220,6 @@ public:
 	static void quicksort(double *list, unsigned long *indexes, long m, long n);
 };
 
-} // NAMESPACE kNN
+} // NAMESPACE kNNclus
 
 #endif // _KNNCLUS_KNNCLUS_H_
