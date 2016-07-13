@@ -1,3 +1,8 @@
+/*! \file kNNclus_Point.cpp
+ *  \brief Implementations for kNNclus::Point.
+ *  \author LTI IUT Amiens
+ */
+
 #include "knnclus.h"
 
 namespace kNNclus

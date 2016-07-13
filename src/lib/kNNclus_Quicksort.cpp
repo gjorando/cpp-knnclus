@@ -1,3 +1,8 @@
+/*! \file kNNclus_Quicksort.cpp
+ *  \brief Implementations for kNNclus::Quicksort.
+ *  \author LTI IUT Amiens
+ */
+
 //Source: http://www.zentut.com/c-tutorial/c-quicksort-algorithm/
 #include "knnclus.h"
 

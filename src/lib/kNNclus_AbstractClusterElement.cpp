@@ -1,3 +1,8 @@
+/*! \file kNNclus_AbstractClusterElement.cpp
+ *  \brief Implementations for kNNclus::AbstractClusterElement.
+ *  \author LTI IUT Amiens
+ */
+
 #include "knnclus.h"
 
 namespace kNNclus

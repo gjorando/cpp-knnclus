@@ -1,3 +1,8 @@
+/*! \file kNNclus_Utils.cpp
+ *  \brief Implementations for kNNclus::Utils.
+ *  \author LTI IUT Amiens
+ */
+
 #include "knnclus.h"
 
 namespace kNNclus

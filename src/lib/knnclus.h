@@ -13,6 +13,10 @@
 #include <sstream>
 #include <cmath>
 
+/*! \brief Global namespace.
+ *
+ *  This namespace contains all the classes and methods of the library.
+ */
 namespace kNNclus
 {
 
@@ -20,7 +24,7 @@ namespace kNNclus
 
 /*! \brief Abstract container for an object which can be clusterized.
  *
- *  Stores the label of the cluster and defines a method which returns the dissimilarity between the element and another element.
+ *  Stores the label of the cluster and defines a method which returns the dissimilarity between the element and another element. You can make child classes based on this one and implement the way the dissimilarity is calculated. kNNclus::Point is an exemple of cluster element describing a point in a N-dimensionnal euclidian space, whose dissimilarity corresponds to the euclidian distance.
  */
 class AbstractClusterElement
 {
@@ -39,7 +43,7 @@ public:
 	 */
 	virtual double dissimilarity(AbstractClusterElement &e) = 0;
 	/*! \brief Returns the display string of the element.
-	 *  \param A string describing the element.
+	 *  \return A string describing the element.
 	 */
 	virtual std::string toString() = 0;
 	/*! \brief Getter of cluster.
@@ -457,7 +461,7 @@ void System<E>::clusterize()
 	
 		if(C == 1)
 		{
-			std::cerr << "EkNNClusterize: Gave only one cluster, please try again" << std::endl;
+			std::cerr << "clusterize: Gave only one cluster, please try again" << std::endl;
 			exit(1);
 		}
 

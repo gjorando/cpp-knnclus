@@ -38,6 +38,7 @@ int main(void)
 	kNNclus::System<kNNclus::Point> s(e, N, K);
 
 	s.clusterize();
+	std::cout << std::endl;
 	s.display();
 
 	return 0;
