@@ -1,6 +1,6 @@
-#include "eknnclus.h"
+#include "knnclus.h"
 
-namespace EkNN
+namespace kNN
 {
 
 System::System(double *p, unsigned long d, unsigned long n, unsigned long k)

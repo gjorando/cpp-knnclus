@@ -1,7 +1,7 @@
 //Source: http://www.zentut.com/c-tutorial/c-quicksort-algorithm/
-#include "eknnclus.h"
+#include "knnclus.h"
 
-namespace EkNN
+namespace kNN
 {
 
 void Quicksort::swapLU(unsigned long *x, unsigned long *y)

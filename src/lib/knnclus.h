@@ -1,17 +1,17 @@
-/*! \file eknnwindev.h
- *  \brief Definitions for the EkNNclus module.
+/*! \file knnwindev.h
+ *  \brief Definitions for the kNNclus module.
  *  \author LTI IUT Amiens
  */
 
-#ifndef _EKNNCLUS_EKNNCLUS_H_
-#define _EKNNCLUS_EKNNCLUS_H_
+#ifndef _KNNCLUS_KNNCLUS_H_
+#define _KNNCLUS_KNNCLUS_H_
 
 #include <iostream>
 #include <cstdlib>
 #include <string>
 #include <cmath>
 
-namespace EkNN
+namespace kNN
 {
 
 // CLASS DEFINITIONS
@@ -219,6 +219,6 @@ public:
 	static void quicksort(double *list, unsigned long *indexes, long m, long n);
 };
 
-} // NAMESPACE EkNN
+} // NAMESPACE kNN
 
-#endif // _EKNNCLUS_EKNNCLUS_H_
+#endif // _KNNCLUS_KNNCLUS_H_

@@ -1,6 +1,6 @@
-#include "eknnclus.h"
+#include "knnclus.h"
 
-namespace EkNN
+namespace kNN
 {
 
 Point::Point()

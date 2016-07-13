@@ -1,4 +1,4 @@
-#include <eknnclus.h>
+#include <knnclus.h>
 #include <iostream>
 
 #define N 6
@@ -26,7 +26,7 @@ int main(void)
 	points[10] = 6;
 	points[11] = 5;
 
-	EkNN::System s(points, D, N, K);
+	kNN::System s(points, D, N, K);
 
 	s.clusterize();
 	s.display();

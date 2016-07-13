@@ -1,6 +1,6 @@
-#include "eknnclus.h"
+#include "knnclus.h"
 
-namespace EkNN
+namespace kNN
 {
 
 void Utils::toss(unsigned long *a, unsigned long aSize, unsigned long iter)
