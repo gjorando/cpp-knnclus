@@ -1,6 +1,6 @@
 all: build buildtest
 cleanall: clean cleantest
-build: obj/kNNclus_Point.o obj/kNNclus_System.o  obj/kNNclus_Utils.o obj/kNNclus_Quicksort.o
+build: obj/kNNclus_Point.o  obj/kNNclus_Utils.o obj/kNNclus_Quicksort.o obj/kNNclus_AbstractClusterElement.o
 	@echo "* Building library..."
 	ar -r build/lib/libknnclus.a obj/*.o
 buildtest: build
@@ -17,12 +17,12 @@ cleantest:
 	rm -f launch
 obj/kNNclus_Point.o: lib/kNNclus_Point.cpp lib/knnclus.h
 	g++ -Wall -c lib/kNNclus_Point.cpp -o obj/kNNclus_Point.o
-obj/kNNclus_System.o: lib/kNNclus_System.cpp lib/knnclus.h
-	g++ -Wall -c lib/kNNclus_System.cpp -o obj/kNNclus_System.o
 obj/kNNclus_Utils.o: lib/kNNclus_Utils.cpp lib/knnclus.h
 	g++ -Wall -c lib/kNNclus_Utils.cpp -o obj/kNNclus_Utils.o
 obj/kNNclus_Quicksort.o: lib/kNNclus_Quicksort.cpp lib/knnclus.h
 	g++ -Wall -c lib/kNNclus_Quicksort.cpp -o obj/kNNclus_Quicksort.o
+obj/kNNclus_AbstractClusterElement.o: lib/kNNclus_AbstractClusterElement.cpp lib/knnclus.h
+	g++ -Wall -c lib/kNNclus_AbstractClusterElement.cpp -o obj/kNNclus_AbstractClusterElement.o
 install: build
 	@echo "* Installing knnclus..."
 	cp build/lib/libknnclus.a /usr/local/lib/

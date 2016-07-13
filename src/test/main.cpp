@@ -25,8 +25,17 @@ int main(void)
 	points[9] = 0;
 	points[10] = 6;
 	points[11] = 5;
+	
+	kNNclus::Point *e = new kNNclus::Point[N];
+	for(unsigned long i = 0 ; i < N ; i++)
+	{
+		e[i].setDepth(D);
+		for(unsigned long j = 0 ; j < D ; j++)
+			e[i][j+1] = points[i*D+j];
+	}
+		
 
-	kNNclus::System s(points, D, N, K);
+	kNNclus::System<kNNclus::Point> s(e, N, K);
 
 	s.clusterize();
 	s.display();

@@ -7,8 +7,10 @@
 #define _KNNCLUS_KNNCLUS_H_
 
 #include <iostream>
+#include <typeinfo>
 #include <cstdlib>
 #include <string>
+#include <sstream>
 #include <cmath>
 
 namespace kNNclus
@@ -16,21 +18,54 @@ namespace kNNclus
 
 // CLASS DEFINITIONS
 
+/*! \brief Abstract container for an object which can be clusterized.
+ *
+ *  Stores the label of the cluster and defines a method which returns the dissimilarity between the element and another element.
+ */
+class AbstractClusterElement
+{
+protected:
+	
+	unsigned long cluster; //!< Label for the cluster of the element.
+
+public:
+
+	/*! \brief Empty constructor for an AbstractClusterElement.
+	 */
+	AbstractClusterElement();
+	/*! \brief Returns the dissimilarity between this element and another element.
+	 *  \param e The other element.
+	 *  \return A real describing the dissimilarity.
+	 */
+	virtual double dissimilarity(AbstractClusterElement &e) = 0;
+	/*! \brief Returns the display string of the element.
+	 *  \param A string describing the element.
+	 */
+	virtual std::string toString() = 0;
+	/*! \brief Getter of cluster.
+	 *  \return cluster.
+	 */
+	unsigned long getCluster();
+	/*! \brief Setter of cluster.
+	 *  \param c new value for cluster.
+	 */
+	void setCluster(unsigned long c);
+};
+
 /*! \brief Container of a two dimensional point.
  *
  *  Stores the coordinates of a point as well as the label of its cluster.
  */
-class Point
+class Point: public AbstractClusterElement
 {
 private:
 
 	double *coordinates; //!< Coordinates for the point
 	unsigned long D; //!< Number of dimensions
-	unsigned long cluster; //!< Label for the cluster of the point.
 
 public:
 
-	/*! \brief Empty constructor for the Point
+	/*! \brief Empty constructor for the Point.
 	 */
 	Point();
 	/*! \brief Constructor for the Point.
@@ -53,14 +88,6 @@ public:
 	 *  \return D.
 	 */
 	unsigned long depth();
-	/*! \brief Getter of cluster.
-	 *  \return cluster.
-	 */
-	unsigned long getCluster();
-	/*! \brief Setter of cluster.
-	 *  \param c new value for cluster.
-	 */
-	void setCluster(unsigned long c);
 	/*! \brief Changes the depth of an Point.
 	 *  \param d New value for D.
 	 *
@@ -68,12 +95,14 @@ public:
 	 */
 	void setDepth(unsigned long d);
 	/*! \brief Computes the euclidian distance between two Points.
-	 *  \param p The point.
+	 *  \param e The point.
 	 *  \return Euclidian distance between this and p.
 	 */
-	double distance(Point &p);
+	double dissimilarity(AbstractClusterElement &e);
+	std::string toString();
 };
 
+template <typename E = AbstractClusterElement>
 /*! \brief Container of an EkNN two dimensional system.
  *
  *  Stores the datas of an EkNN two dimensional system. Must be initialized with EkNNInit(double **points, long K).
@@ -82,7 +111,7 @@ class System
 {
 private:
 
-	Point *points; //!< The points of the system.
+	E *elements; //!< The points of the system.
 	double **distances; //!< N*N array storing the euclidian distances for each point (useful to compute kNN).
 	double **alpha; //!< N*K alpha_ik matrix (useful to compute v).
 	double **v; //!< N*K v_ik matrix.
@@ -91,7 +120,6 @@ private:
 	unsigned long N; //!< Number of points.
 	unsigned long K; //!< K parameter for the kNN.
 	unsigned long C; //!< Actual number of clusters.
-	unsigned long D; //!< Depth of the system.
 
 	/*! \brief Computes initial clusters of an System.
 	 *
@@ -130,14 +158,13 @@ private:
 public:
 
 	/*! \brief Constructor of System.
-	 *  \param p Array of N*D values (D first values for the first point, D next ones for the second point, and so on).
+	 *  \param elems Array of N*D values (D first values for the first point, D next ones for the second point, and so on).
 	 *  \param n Number of points.
 	 *  \param k K parameter for the kNN algorithm.
-	 *  \param d Number of dimensions.
 	 *
 	 *  When you want to clusterize a set of points, you need essential parameters: this constructor computes them.
 	 */
-	System(double *p, unsigned long d, unsigned long n, unsigned long k);
+	System(E *elems, unsigned long n, unsigned long k);
 	/*! \brief Destructor of System.
 	 */
 	~System();
@@ -219,6 +246,319 @@ public:
 	 */
 	static void quicksort(double *list, unsigned long *indexes, long m, long n);
 };
+
+//TEMPLATE CLASS IMPLEMENTATION
+
+//System
+
+template <typename E>
+System<E>::System(E *elems, unsigned long n, unsigned long k)
+{	
+	N = n;
+	K = k;
+	C = n;
+
+	elements = elems;
+	initClusters();
+	initDistances();
+	initKNN();
+	initGamma();
+	initAlpha();
+	initV();
+}
+
+template <typename E>
+void System<E>::initClusters()
+{
+	unsigned long *clus = new unsigned long[N];
+
+	for(unsigned long i = 0 ; i < N ; i++)
+		clus[i] = i+1;
+
+	Utils::toss(clus, N, 1.5*N);
+
+	for(unsigned long i = 0 ; i < N ; i++)
+		elements[i].setCluster(clus[i]);
+
+	delete[] clus;
+}
+
+template <typename E>
+void System<E>::initDistances()
+{
+	double **dist = new double*[N];
+	for(unsigned long i = 0 ; i < N ; i++)
+		dist[i] = new double[N];
+
+	for(unsigned long i = 0 ; i < N ; i++)
+	{
+		dist[i][i] = 0;
+		for(unsigned long j = 0 ; j < i ; j++)
+		{
+			dist[i][j] = elements[i].dissimilarity(elements[j]);
+			dist[j][i] = dist[i][j];
+		}
+	}
+
+	distances = dist;
+}
+
+template <typename E>
+void System<E>::initKNN()
+{
+	unsigned long **knn = new unsigned long*[N];
+	for(unsigned long i = 0 ; i < N ; i++)
+		knn[i] = new unsigned long[K];
+
+	for(unsigned long i = 0 ; i < N ; i++)
+	{
+		double *tmpD = new double[N];
+
+		for(unsigned long j = 0 ; j < N ; j++)
+			tmpD[j] = distances[i][j];
+
+		unsigned long *tmp = Utils::specialSort(tmpD, N);
+		
+		unsigned long j = 0, k = 0; 
+		while(j < K)
+		{
+			if(tmpD[k] != 0)
+			{
+				knn[i][j] = tmp[k];
+				j++;
+			}
+			k++;
+		}
+
+		delete[] tmpD;
+		delete[] tmp;
+	}
+
+	kNN = knn;
+}
+
+template <typename E>
+void System<E>::initGamma()
+{
+	double *dist;
+	dist = new double[K*N];
+
+	unsigned long cpt = 0;
+
+	for(unsigned long i = 0 ; i < N ; i++)
+		for(unsigned long j = 0 ; j < K ; j++)
+			dist[cpt++] = distances[i][kNN[i][j]];
+
+	gamma = 1/Utils::median(dist, K*N);
+
+	delete[] dist;
+
+}
+
+template <typename E>
+void System<E>::initAlpha()
+{
+	double **a = new double*[N];
+	for(unsigned long i = 0 ; i < N ; i++)
+		a[i] = new double[K];
+
+	for(unsigned long i = 0 ; i < N ; i++)
+		for(unsigned long j = 0 ; j < K ; j++)
+			a[i][j] = exp(-gamma*distances[i][kNN[i][j]]*distances[i][kNN[i][j]]);
+
+	alpha = a;
+}
+
+template <typename E>
+void System<E>::initV()
+{
+	v = new double*[N];
+	for(unsigned long i = 0 ; i < N ; i++)
+		v[i] = new double[K];
+
+	for(unsigned long i = 0 ; i < N ; i++)
+		for(unsigned long j = 0 ; j < K ; j++)
+			v[i][j] = -log(1-alpha[i][j]);
+}
+
+template <typename E>
+System<E>::~System()
+{
+	delete[] elements;
+	for(unsigned long i = 0 ; i < N ; i++)
+	{
+		delete[] distances[i];
+		delete[] kNN[i];
+		delete[] alpha[i];
+		delete[] v[i];
+	}
+	delete[] distances;
+	delete[] kNN;
+	delete[] alpha;
+	delete[] v;
+}
+
+template <typename E>
+void System<E>::clusterize()
+{
+	bool flag = true;
+	unsigned long *sigma = new unsigned long[N];
+	for(unsigned long i = 0 ; i < N ; i++)
+		sigma[i] = i;
+
+	unsigned long iter = 1;
+
+	while(flag)
+	{
+		std::cout << "Iteration #" << iter << std::endl;
+
+		flag = false;
+
+		double **u = new double*[N];
+		for(unsigned long i = 0 ; i < N ; i++)
+		{
+			u[i] = new double[C];
+			for(unsigned long j = 0 ; j < C ; j++)
+				u[i][j] = 0;
+		}
+		
+		Utils::toss(sigma, N, 2*N);
+
+		for(unsigned long i = 0 ; i < N ; i++)
+		{
+			std::cout << sigma[i] << "... ";
+
+			double max = 0;
+			unsigned long kstar = 1;
+
+			for(unsigned long k = 0 ; k < C ; k++)
+			{
+				for(unsigned long j = 0 ; j < K ; j++)
+					if(elements[kNN[sigma[i]][j]].getCluster() == k+1)
+						u[sigma[i]][k]+= v[sigma[i]][j];
+
+				if(u[sigma[i]][k] >= max)
+				{
+					max = u[sigma[i]][k];
+					kstar = k+1;
+				}
+			}
+
+			if(elements[sigma[i]].getCluster() != kstar)
+			{
+				elements[sigma[i]].setCluster(kstar);
+				flag = true;
+			}
+		}
+		updateC();
+		for(unsigned long i = 0 ; i < N ; i++)
+			delete[] u[i];
+		delete u;
+	
+		if(C == 1)
+		{
+			std::cerr << "EkNNClusterize: Gave only one cluster, please try again" << std::endl;
+			exit(1);
+		}
+
+		std::cout << std::endl;
+		iter++;
+	}
+
+	delete[] sigma;
+
+}
+
+template <typename E>
+void System<E>::updateC()
+{
+	unsigned long *clus = new unsigned long[N];
+	for(unsigned long i = 0 ; i < N ; i++)
+		clus[i] = elements[i].getCluster();
+
+	Quicksort::quicksort((double*)clus, NULL, 0, N-1);
+
+	//We kept C allocations because we need to use realloc
+	unsigned long *distClus = (unsigned long*) malloc(sizeof(unsigned long));
+	distClus[0] = clus[0];
+	unsigned long c = 1;
+
+	for(unsigned long i = 1 ; i < N ; i++)
+		if(clus[i] != clus[i-1])
+		{
+			c++;
+			distClus = (unsigned long*) realloc(distClus, c*sizeof(unsigned long));
+			distClus[c-1] = clus[i];
+		}
+
+	for(unsigned long i = 0 ; i < N ; i++)
+	{
+		unsigned long oldClus = elements[i].getCluster();
+		unsigned long j = 0;
+		while(oldClus!=distClus[j])
+		{	
+			j++;
+			if(j>=c)
+			{
+				std::cerr << "EkNNUpdateC: Unexpected error" << std::endl;
+				exit(2);
+			}
+		}
+		elements[i].setCluster(j+1);
+	}
+
+	C = c;
+
+	delete[] clus;
+	free(distClus);
+
+}
+
+template <typename E>
+void System<E>::display()
+{
+	std::cout << "N=" << N << std::endl;
+	std::cout << "K=" << K << std::endl;
+	std::cout << "C=" << C << std::endl;
+
+	std::cout << std::endl << "elements=" << std::endl;
+	for(unsigned long i = 0 ; i < N ; i++)
+		std::cout << elements[i].toString() << std::endl;
+	
+	std::cout << std::endl << "distances=" << std::endl;
+	for(unsigned long i = 0 ; i < N ; i++)
+	{
+		for(unsigned long j = 0 ; j < N ; j++)
+			std::cout << distances[i][j] << " ";
+		std::cout << std::endl;
+	}
+
+	std::cout << std::endl << "kNN=" << std::endl;
+	for(unsigned long i = 0 ; i < N ; i++)
+	{
+		for(unsigned long j = 0 ; j < K ; j++)
+			std::cout << kNN[i][j] << " ";
+		std::cout << std::endl;
+	}
+
+	std::cout << std::endl << "gamma=" << std::endl << gamma <<std::endl;
+
+	std::cout << std::endl << "alpha=" << std::endl;
+	for(unsigned long i = 0 ; i < N ; i++)
+	{
+		for(unsigned long j = 0 ; j < K ; j++)
+			std::cout << alpha[i][j] << " ";
+		std::cout << std::endl;
+	}
+
+	std::cout << std::endl << "v=" << std::endl;
+	for(unsigned long i = 0 ; i < N ; i++)
+	{
+		for(unsigned long j = 0 ; j < K ; j++)
+			std::cout << v[i][j] << " ";
+		std::cout << std::endl;
+	}
+}
 
 } // NAMESPACE kNNclus
 

@@ -3,19 +3,19 @@
 namespace kNNclus
 {
 
-Point::Point()
+Point::Point(): AbstractClusterElement()
 {
 	coordinates = NULL;
 	D = 0;
 }
 
-Point::Point(unsigned long dim)
+Point::Point(unsigned long dim): AbstractClusterElement()
 {
 	coordinates = new double[dim];
 	D = dim;
 }
 
-Point::Point(Point &p)
+Point::Point(Point &p): AbstractClusterElement()
 {
 	coordinates = new double[p.depth()];
 	D = p.depth();
@@ -43,16 +43,6 @@ unsigned long Point::depth()
 	return D;
 }
 
-unsigned long Point::getCluster()
-{
-	return cluster;
-}
-
-void Point::setCluster(unsigned long c)
-{
-	cluster = c;
-}
-
 void Point::setDepth(unsigned long d)
 {
 	D = d;
@@ -60,15 +50,36 @@ void Point::setDepth(unsigned long d)
 	coordinates = new double[d];
 }
 
-double Point::distance(Point &p)
+double Point::dissimilarity(AbstractClusterElement &e)
 {
-	bool smallestDimIsThis = D<p.depth()?true:false;
-	double smallestDim = smallestDimIsThis?D:p.depth();
-	double calc = 0;
-	for(unsigned long i = 0 ; i < smallestDim ; i++)
-		calc += (coordinates[i] - p[i+1])*(coordinates[i] - p[i+1]);
+	try
+	{
+		Point &p = dynamic_cast<Point&>(e);
+		bool smallestDimIsThis = D<p.depth()?true:false;
+		double smallestDim = smallestDimIsThis?D:p.depth();
+		double calc = 0;
+		for(unsigned long i = 0 ; i < smallestDim ; i++)
+			calc += (coordinates[i] - p[i+1])*(coordinates[i] - p[i+1]);
 
-	return sqrt(calc);
+		return sqrt(calc);
+	}
+	catch (const std::bad_cast &e)
+	{
+		std::cerr << e.what() << std::endl;
+		std::cerr << &e << " isn't of type Point" << std::endl;
+
+		return -1;
+	}
+}
+
+std::string Point::toString()
+{
+	std::ostringstream stream;
+	for(unsigned long j = 0 ; j < D ; j++)
+		stream << coordinates[j] << ((j+1!=D)?":":"");
+	stream << " | #" << cluster;
+
+	return stream.str();
 }
 
 } // NAMESPACE kNNclus
