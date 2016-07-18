@@ -1,6 +1,6 @@
 all: build buildtest
 cleanall: clean cleantest
-build: obj/kNNclus_Point.o  obj/kNNclus_Utils.o obj/kNNclus_Quicksort.o obj/kNNclus_AbstractClusterElement.o
+build: obj/kNNclus_Point.o obj/kNNclus_Hour.o obj/kNNclus_Utils.o obj/kNNclus_Quicksort.o obj/kNNclus_AbstractClusterElement.o
 	@echo "* Building library..."
 	ar -r build/lib/libknnclus.a obj/*.o
 buildtest: build
@@ -23,6 +23,8 @@ obj/kNNclus_Quicksort.o: lib/kNNclus_Quicksort.cpp lib/knnclus.h
 	g++ -Wall -c lib/kNNclus_Quicksort.cpp -o obj/kNNclus_Quicksort.o
 obj/kNNclus_AbstractClusterElement.o: lib/kNNclus_AbstractClusterElement.cpp lib/knnclus.h
 	g++ -Wall -c lib/kNNclus_AbstractClusterElement.cpp -o obj/kNNclus_AbstractClusterElement.o
+obj/kNNclus_Hour.o: lib/kNNclus_Hour.cpp lib/knnclus.h
+	g++ -Wall -c lib/kNNclus_Hour.cpp -o obj/kNNclus_Hour.o
 install: build
 	@echo "* Installing knnclus..."
 	cp build/lib/libknnclus.a /usr/local/lib/

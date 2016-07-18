@@ -56,6 +56,64 @@ public:
 	void setCluster(unsigned long c);
 };
 
+/*! \brief Container of a hour.
+ *
+ *  Stores the value of a hour to clusterize them.
+ */
+class Hour: public AbstractClusterElement
+{
+private:
+	
+	unsigned int hour, //!< Value of the hour.
+				 minute, //!< Value of the minute.
+				 second; //!< Value of the second.
+
+public:
+
+	/*! \brief Empty constructor for a clusterizable hour.
+	 */
+	Hour();
+	/*! \brief Default constructor for a clusterizable hour.
+	 *  \param h The hour.
+	 *  \param m The minute.
+	 *  \param s The second.
+	 */
+	Hour(unsigned int h, unsigned int m, unsigned int s);
+	/*! \brief Get the distance on a 24h clock between a hour and another one.
+	 *  \param e The other element
+	 */
+	double dissimilarity(AbstractClusterElement &e);
+	std::string toString();
+	/*! \brief Getter of hour.
+	 *  \return Value of hour.
+	 */
+	unsigned int getHour();
+	/*! \brief Setter of hour.
+	 *  \param h New value of hour.
+	 */
+	void setHour(unsigned int h);
+	/*! \brief Getter of minute.
+	 *  \return Value of minute.
+	 */
+	unsigned int getMinute();
+	/*! \brief Setter of minute.
+	 *  \param m New value of minute.
+	 */
+	void setMinute(unsigned int m);
+	/*! \brief Getter of second.
+	 *  \return Value of second.
+	 */
+	unsigned int getSecond();
+	/*! \brief Setter of second.
+	 *  \param s New value of second.
+	 */
+	void setSecond(unsigned int s);
+	/*! \brief Converts the hour to a decimal value.
+	 *  \return Decimal value.
+	 */
+	double asDecimal();
+};
+
 /*! \brief Container of a two dimensional point.
  *
  *  Stores the coordinates of a point as well as the label of its cluster.
@@ -64,8 +122,8 @@ class Point: public AbstractClusterElement
 {
 private:
 
-	double *coordinates; //!< Coordinates for the point
-	unsigned long D; //!< Number of dimensions
+	double *coordinates; //!< Coordinates for the point.
+	unsigned long D; //!< Number of dimensions.
 
 public:
 
@@ -220,7 +278,7 @@ public:
  */
 class Quicksort
 {
-public:
+private:
 	
 	/*! \brief Swaps in memory two unsigned long.
 	 *  \param x Pointer to the first unsigned long.
@@ -240,6 +298,9 @@ public:
 	 *  The implementation in quicksort.c uses the mean of i and j as a pivot.
 	 */
 	static long choose_pivot(long i, long j);
+
+public:
+
 	/*! \brief Sorts a list using quicksort algorithm.
 	 *  \param list The array to sort.
 	 *  \param indexes Another array that will go through the same swap operations as the list parameter. Just use the NULL pointer if you don't care.
