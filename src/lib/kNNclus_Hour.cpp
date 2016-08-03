@@ -1,3 +1,8 @@
+/*! \file kNNclus_Hour.cpp
+ *  \brief Implementations for kNNclus::Hour.
+ *  \author LTI IUT Amiens
+ */
+
 #include "knnclus.h"
 
 namespace kNNclus
